@@ -1,0 +1,52 @@
+import Groq from 'groq-sdk';
+import { PassThrough } from 'stream';
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+export const ContentBlockType = {
+  Text: 'text',
+  Image: 'image',
+};
+
+export async function stream({ userId, systemPrompt, userMessage }) {
+  const messages = userMessage.map(block => {
+    if (block.type === ContentBlockType.Text) {
+      return { role: 'user', content: block.text };
+    }
+    return { role: 'user', content: block.text || '' };
+  });
+
+  const passThrough = new PassThrough();
+
+  (async () => {
+    try {
+      const chatStream = await groq.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...messages,
+        ],
+        stream: true,
+        max_tokens: 1024,
+      });
+
+      for await (const chunk of chatStream) {
+        const text = chunk.choices[0]?.delta?.content || '';
+        if (text) {
+          passThrough.write(`data: ${JSON.stringify({ text })}\n\n`);
+        }
+      }
+      passThrough.write('data: [DONE]\n\n');
+      passThrough.end();
+    } catch (err) {
+      passThrough.write(`data: ${JSON.stringify({ error: err.message })}\n\n`);
+      passThrough.end();
+    }
+  })();
+
+  return passThrough;
+}
+
+export async function uploadImagesToPocketBase({ images }) {
+  return images.map(img => `/uploads/${img.filename}`);
+}
