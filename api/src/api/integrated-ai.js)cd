@@ -1,0 +1,1 @@
+export async function uploadImagesToPocketBase({ images }) { return images.map(i => '/uploads/' + i.filename); }  "C:\Users\CEM\OneDrive\Desktop\Yeni klas”r"
