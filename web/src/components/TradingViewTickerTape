@@ -1,0 +1,37 @@
+import { useEffect, useRef } from 'react';
+
+export default function TradingViewTickerTape() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (ref.current && ref.current.children.length === 0) {
+      const script = document.createElement('script');
+      script.src = 'https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js';
+      script.async = true;
+      script.innerHTML = JSON.stringify({
+        symbols: [
+          { proName: 'FOREXCOM:SPXUSD', title: 'S&P 500' },
+          { proName: 'FOREXCOM:NSXUSD', title: 'Nasdaq 100' },
+          { proName: 'FX_IDC:EURUSD', title: 'EUR/USD' },
+          { proName: 'BITSTAMP:BTCUSD', title: 'Bitcoin' },
+          { proName: 'BITSTAMP:ETHUSD', title: 'Ethereum' },
+          { description: 'BIST 100', proName: 'BIST:XU100' },
+          { description: 'USD/TRY', proName: 'FX_IDC:USDTRY' },
+          { description: 'Gold', proName: 'FOREXCOM:XAUUSD' },
+        ],
+        showSymbolLogo: true,
+        colorTheme: 'dark',
+        isTransparent: true,
+        displayMode: 'adaptive',
+        locale: 'tr',
+      });
+      ref.current.appendChild(script);
+    }
+  }, []);
+
+  return (
+    <div className="tradingview-widget-container" ref={ref}>
+      <div className="tradingview-widget-container__widget" />
+    </div>
+  );
+}
