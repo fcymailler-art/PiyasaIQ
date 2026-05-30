@@ -58,7 +58,7 @@ const Navigation = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div className="relative w-32 h-32 overflow-hidden rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-white/10 group-hover:border-primary/50 transition-colors">
+              <div className="relative w-28 h-28 overflow-hidden rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-white/10 group-hover:border-primary/50 transition-colors">
                 <img 
                   src="/logo_olarak_bu.png" 
                   alt="PiyasaIQ Logo" 
