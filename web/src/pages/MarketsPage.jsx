@@ -1,191 +1,236 @@
-import React, { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { motion } from 'framer-motion';
-import { Search, TrendingUp, TrendingDown } from 'lucide-react';
-import Navigation from '@/components/Navigation';
-import Footer from '@/components/Footer';
-import AIAssistant from '@/components/AIAssistant';
-import AIScoreBadge from '@/components/AIScoreBadge';
-import { Input } from '@/components/ui/input';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { useMarketData } from '@/hooks/useMarketData';
-import { formatPrice } from '@/utils/formatPrice';
-import { formatPercentage } from '@/utils/formatPercentage';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Search, TrendingUp, TrendingDown, Sparkles, ArrowUpDown, Activity, ChevronLeft, ChevronRight } from 'lucide-react';
+import { AreaChart, Area, ResponsiveContainer } from 'recharts';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import AIChatWidget from '../components/AIChatWidget';
+import { ALL_MARKET_DATA, SECTORS, SIGNAL_STYLE } from '../lib/marketData';
 
-const MarketsPage = () => {
-  const { markets, loading, error } = useMarketData();
-  const [searchQuery, setSearchQuery] = useState('');
+const PAGE_SIZE = 25;
 
-  const filteredMarkets = markets.filter((market) =>
-    market.symbol.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+function generateSparkline(change) {
+  const trend = change >= 0 ? 1 : -1;
+  return Array.from({ length: 10 }, (_, i) => 50 + trend * i * 1.5 + (Math.random() - 0.5) * 6);
+}
 
-  const topGainers = [...markets]
-    .sort((a, b) => b.priceChangePercent - a.priceChangePercent)
-    .slice(0, 5);
+export default function Markets() {
+  const [search, setSearch] = useState('');
+  const [sector, setSector] = useState('Tümü');
+  const [signal, setSignal] = useState('Tümü');
+  const [sortBy, setSortBy] = useState('rank');
+  const [sortDir, setSortDir] = useState('asc');
+  const [page, setPage] = useState(1);
+  const [prices, setPrices] = useState(() => Object.fromEntries(ALL_MARKET_DATA.map(m => [m.symbol, m.price])));
 
-  const topLosers = [...markets]
-    .sort((a, b) => a.priceChangePercent - b.priceChangePercent)
-    .slice(0, 5);
+  // Live price simulation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPrices(prev => {
+        const next = { ...prev };
+        ALL_MARKET_DATA.forEach(m => {
+          const delta = (Math.random() - 0.49) * 0.002;
+          next[m.symbol] = +(prev[m.symbol] * (1 + delta)).toFixed(m.price < 0.001 ? 8 : m.price < 1 ? 5 : m.price < 100 ? 3 : 2);
+        });
+        return next;
+      });
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Filter + sort
+  const filtered = useMemo(() => {
+    let data = ALL_MARKET_DATA
+      .filter(m => m.name.toLowerCase().includes(search.toLowerCase()) || m.symbol.toLowerCase().includes(search.toLowerCase()))
+      .filter(m => sector === 'Tümü' || m.sector === sector)
+      .filter(m => signal === 'Tümü' || m.aiSignal === signal);
+
+    data.sort((a, b) => {
+      let va = a[sortBy], vb = b[sortBy];
+      if (sortBy === 'change24h' || sortBy === 'aiScore' || sortBy === 'rank') {
+        return sortDir === 'asc' ? va - vb : vb - va;
+      }
+      return sortDir === 'asc' ? String(va).localeCompare(String(vb)) : String(vb).localeCompare(String(va));
+    });
+    return data;
+  }, [search, sector, signal, sortBy, sortDir]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const pageData = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const toggleSort = (col) => {
+    if (sortBy === col) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+    else { setSortBy(col); setSortDir('asc'); }
+    setPage(1);
+  };
+
+  // Summary stats
+  const bullish = ALL_MARKET_DATA.filter(m => m.aiSignal === 'AL' || m.aiSignal === 'GÜÇLÜ AL').length;
+  const bearish = ALL_MARKET_DATA.filter(m => m.aiSignal === 'SAT' || m.aiSignal === 'GÜÇLÜ SAT').length;
+  const avgAI = Math.round(ALL_MARKET_DATA.reduce((s, m) => s + m.aiScore, 0) / ALL_MARKET_DATA.length);
 
   return (
-    <>
-      <Helmet>
-        <title>Piyasalar - PiyasaIQ</title>
-        <meta name="description" content="Kripto ve forex piyasalarını gerçek zamanlı takip edin. AI destekli analiz ve tahminlerle akıllı yatırım kararları alın." />
-      </Helmet>
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <div className="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
+          <h1 className="font-heading font-bold text-3xl sm:text-4xl text-foreground mb-2">Kripto Piyasaları</h1>
+          <p className="text-muted-foreground">100+ varlık için anlık fiyatlar, AI analizi ve teknik göstergeler</p>
+        </motion.div>
 
-      <div className="min-h-screen bg-background text-text">
-        <Navigation />
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4" style={{ fontFamily: 'Sora, sans-serif' }}>
-              Piyasalar
-            </h1>
-            <p className="text-secondary text-lg mb-8">
-              Gerçek zamanlı piyasa verileri ve AI destekli analizler
-            </p>
-
-            <div className="relative mb-8">
-              <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary" />
-              <Input
-                type="text"
-                placeholder="Piyasa ara (örn: BTC, ETH, EUR)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-12 h-12 bg-card border-white/10 text-text placeholder:text-secondary"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              <div className="rounded-3xl border border-white/10 bg-card p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp size={20} className="text-emerald-400" />
-                  <h2 className="text-lg font-bold">En Çok Yükselenler</h2>
-                </div>
-                <div className="space-y-3">
-                  {topGainers.map((market) => (
-                    <Link
-                      key={market.symbol}
-                      to={`/piyasalar/${market.symbol}`}
-                      className="flex items-center justify-between p-3 rounded-xl hover:bg-hover transition-colors duration-200"
-                    >
-                      <span className="font-medium">{market.symbol}</span>
-                      <span className="text-emerald-400 font-semibold">
-                        {formatPercentage(market.priceChangePercent)}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+        {/* Summary Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {[
+            { label: 'Toplam Varlık', value: ALL_MARKET_DATA.length.toString(), icon: Activity, color: 'text-primary', bg: 'bg-primary/10' },
+            { label: 'Yükseliş Sinyali', value: bullish.toString(), icon: TrendingUp, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
+            { label: 'Düşüş Sinyali', value: bearish.toString(), icon: TrendingDown, color: 'text-red-400', bg: 'bg-red-500/10' },
+            { label: 'Ort. AI Skoru', value: avgAI.toString(), icon: Sparkles, color: 'text-secondary', bg: 'bg-secondary/10' },
+          ].map((s, i) => (
+            <motion.div key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.07 }} className="glass-card p-5 flex items-center gap-4">
+              <div className={`w-10 h-10 rounded-xl ${s.bg} flex items-center justify-center shrink-0`}>
+                <s.icon className={`w-5 h-5 ${s.color}`} />
               </div>
-
-              <div className="rounded-3xl border border-white/10 bg-card p-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <TrendingDown size={20} className="text-red-400" />
-                  <h2 className="text-lg font-bold">En Çok Düşenler</h2>
-                </div>
-                <div className="space-y-3">
-                  {topLosers.map((market) => (
-                    <Link
-                      key={market.symbol}
-                      to={`/piyasalar/${market.symbol}`}
-                      className="flex items-center justify-between p-3 rounded-xl hover:bg-hover transition-colors duration-200"
-                    >
-                      <span className="font-medium">{market.symbol}</span>
-                      <span className="text-red-400 font-semibold">
-                        {formatPercentage(market.priceChangePercent)}
-                      </span>
-                    </Link>
-                  ))}
-                </div>
+              <div>
+                <div className="font-mono font-bold text-xl text-foreground">{s.value}</div>
+                <div className="text-xs text-muted-foreground">{s.label}</div>
               </div>
-            </div>
-
-            <div className="rounded-3xl border border-white/10 bg-card overflow-hidden">
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-white/10 hover:bg-transparent">
-                      <TableHead className="text-secondary">Sembol</TableHead>
-                      <TableHead className="text-secondary">Fiyat</TableHead>
-                      <TableHead className="text-secondary">24h Değişim</TableHead>
-                      <TableHead className="text-secondary">Hacim</TableHead>
-                      <TableHead className="text-secondary">AI Score</TableHead>
-                      <TableHead className="text-secondary">AI Özet</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {loading ? (
-                      [...Array(10)].map((_, i) => (
-                        <TableRow key={i} className="border-white/10">
-                          <TableCell><Skeleton className="h-5 w-20" /></TableCell>
-                          <TableCell><Skeleton className="h-5 w-24" /></TableCell>
-                          <TableCell><Skeleton className="h-5 w-16" /></TableCell>
-                          <TableCell><Skeleton className="h-5 w-28" /></TableCell>
-                          <TableCell><Skeleton className="h-6 w-16" /></TableCell>
-                          <TableCell><Skeleton className="h-5 w-full" /></TableCell>
-                        </TableRow>
-                      ))
-                    ) : error ? (
-                      <TableRow>
-                        <TableCell colSpan={6} className="text-center py-12 text-secondary">
-                          Veriler yüklenirken bir hata oluştu. Lütfen tekrar deneyin.
-                        </TableCell>
-                      </TableRow>
-                    ) : filteredMarkets.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={6} className="text-center py-12 text-secondary">
-                          Arama kriterlerine uygun piyasa bulunamadı.
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      filteredMarkets.map((market) => {
-                        const isPositive = market.priceChangePercent > 0;
-                        return (
-                          <TableRow
-                            key={market.symbol}
-                            className="border-white/10 hover:bg-hover transition-colors duration-200 cursor-pointer"
-                            onClick={() => window.location.href = `/piyasalar/${market.symbol}`}
-                          >
-                            <TableCell className="font-semibold">{market.symbol}</TableCell>
-                            <TableCell className="font-mono">{formatPrice(market.price)}</TableCell>
-                            <TableCell>
-                              <span className={`font-semibold ${isPositive ? 'text-emerald-400' : 'text-red-400'}`}>
-                                {formatPercentage(market.priceChangePercent)}
-                              </span>
-                            </TableCell>
-                            <TableCell className="font-mono text-secondary">
-                              {formatPrice(market.volume, 'USD')}
-                            </TableCell>
-                            <TableCell>
-                              <AIScoreBadge score={market.aiScore} size="sm" showLabel={false} />
-                            </TableCell>
-                            <TableCell className="text-secondary text-sm max-w-md truncate">
-                              {market.aiSummary || 'Analiz bekleniyor...'}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ))}
         </div>
 
-        <Footer />
-        <AIAssistant />
-      </div>
-    </>
-  );
-};
+        {/* Filters */}
+        <div className="glass-card p-4 mb-6 space-y-3">
+          <div className="flex flex-col sm:flex-row gap-3">
+            <div className="flex items-center gap-2 bg-muted/50 rounded-xl px-4 py-2.5 flex-1 max-w-xs">
+              <Search className="w-4 h-4 text-muted-foreground shrink-0" />
+              <input value={search} onChange={e => { setSearch(e.target.value); setPage(1); }} placeholder="Varlık ara..." className="bg-transparent text-sm text-foreground placeholder:text-muted-foreground outline-none flex-1" />
+            </div>
+            <select value={signal} onChange={e => { setSignal(e.target.value); setPage(1); }} className="bg-muted/50 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-foreground outline-none">
+              {['Tümü', 'GÜÇLÜ AL', 'AL', 'NÖTR', 'SAT'].map(s => <option key={s} value={s}>{s}</option>)}
+            </select>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground ml-auto">
+              <Activity className="w-3 h-3 text-emerald-400 animate-pulse" />
+              <span className="text-emerald-400">Canlı</span>
+              <span className="ml-2">{filtered.length} varlık</span>
+            </div>
+          </div>
+          {/* Sector pills */}
+          <div className="flex gap-2 flex-wrap">
+            {SECTORS.slice(0, 12).map(c => (
+              <button key={c} onClick={() => { setSector(c); setPage(1); }} className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-colors ${sector === c ? 'bg-primary text-white' : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'}`}>{c}</button>
+            ))}
+          </div>
+        </div>
 
-export default MarketsPage;
+        {/* Table */}
+        <div className="glass-card overflow-hidden mb-6">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[860px]">
+              <thead>
+                <tr className="border-b border-white/5 bg-muted/20">
+                  {[
+                    { label: '#', col: 'rank' }, { label: 'Varlık', col: 'name' }, { label: 'Fiyat', col: 'price' },
+                    { label: '24s %', col: 'change24h' }, { label: '7G %', col: 'change7d' },
+                    { label: 'AI Sinyal', col: 'aiSignal' }, { label: 'AI', col: 'aiScore' },
+                    { label: 'RSI', col: 'rsi' }, { label: 'Hacim', col: 'volume' }, { label: 'Sektör', col: 'sector' }, { label: 'Graf', col: null },
+                  ].map(h => (
+                    <th key={h.label} onClick={() => h.col && toggleSort(h.col)}
+                      className={`text-left px-4 py-3.5 text-xs font-medium text-muted-foreground uppercase tracking-wider whitespace-nowrap ${h.col ? 'cursor-pointer hover:text-foreground' : ''} ${sortBy === h.col ? 'text-primary' : ''}`}
+                    >
+                      <div className="flex items-center gap-1">{h.label}{h.col && <ArrowUpDown className="w-3 h-3 opacity-50" />}</div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {pageData.map((m, i) => {
+                  const sparkData = generateSparkline(m.change24h).map((v, j) => ({ v, i: j }));
+                  return (
+                    <motion.tr key={m.symbol} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.02 }}
+                      className="border-b border-white/5 hover:bg-muted/20 transition-colors group"
+                    >
+                      <td className="px-4 py-3.5 text-sm text-muted-foreground font-mono">{m.rank}</td>
+                      <td className="px-4 py-3.5">
+                        <Link to={`/piyasalar/${m.pair}`} className="flex items-center gap-3">
+                          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-muted to-muted/30 flex items-center justify-center font-mono font-bold text-xs text-foreground group-hover:from-primary/20 group-hover:to-secondary/20 transition-all">{m.symbol.slice(0, 2)}</div>
+                          <div>
+                            <div className="font-semibold text-sm text-foreground group-hover:text-primary transition-colors">{m.name}</div>
+                            <div className="text-xs text-muted-foreground">{m.symbol}</div>
+                          </div>
+                        </Link>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <div className="font-mono font-semibold text-sm text-foreground">${prices[m.symbol]?.toLocaleString()}</div>
+                        <div className="text-xs text-muted-foreground">{m.mcap}</div>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <span className={`font-mono text-sm font-semibold ${m.change24h >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          {m.change24h >= 0 ? '+' : ''}{m.change24h}%
+                        </span>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <span className={`font-mono text-xs font-semibold ${m.change7d >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                          {m.change7d >= 0 ? '+' : ''}{m.change7d}%
+                        </span>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${SIGNAL_STYLE[m.aiSignal]}`}>{m.aiSignal}</span>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-secondary/10 w-fit">
+                          <Sparkles className="w-3 h-3 text-secondary" />
+                          <span className={`font-mono text-xs font-bold ${m.aiScore >= 80 ? 'text-emerald-400' : m.aiScore >= 60 ? 'text-amber-400' : 'text-red-400'}`}>{m.aiScore}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3.5">
+                        <span className={`font-mono text-xs font-semibold ${m.rsi > 70 ? 'text-red-400' : m.rsi < 30 ? 'text-emerald-400' : 'text-amber-400'}`}>{m.rsi}</span>
+                      </td>
+                      <td className="px-4 py-3.5 font-mono text-xs text-muted-foreground">{m.volume}</td>
+                      <td className="px-4 py-3.5">
+                        <span className="px-2 py-1 rounded-md bg-muted/40 text-xs text-muted-foreground whitespace-nowrap">{m.sector}</span>
+                      </td>
+                      <td className="px-4 py-3.5 w-24">
+                        <ResponsiveContainer width="100%" height={32}>
+                          <AreaChart data={sparkData}>
+                            <Area type="monotone" dataKey="v" stroke={m.change24h >= 0 ? '#10B981' : '#EF4444'} fill="transparent" strokeWidth={1.5} dot={false} />
+                          </AreaChart>
+                        </ResponsiveContainer>
+                      </td>
+                    </motion.tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Pagination */}
+        <div className="flex items-center justify-between">
+          <span className="text-sm text-muted-foreground">
+            {(page - 1) * PAGE_SIZE + 1}–{Math.min(page * PAGE_SIZE, filtered.length)} / {filtered.length} varlık
+          </span>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
+              className="w-9 h-9 rounded-xl border border-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 disabled:opacity-30 transition-all">
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).filter(p => p === 1 || p === totalPages || Math.abs(p - page) <= 1).map((p, i, arr) => (
+              <>
+                {i > 0 && arr[i - 1] !== p - 1 && <span key={`e${p}`} className="text-muted-foreground px-1">…</span>}
+                <button key={p} onClick={() => setPage(p)} className={`w-9 h-9 rounded-xl text-sm font-medium transition-all ${p === page ? 'bg-primary text-white' : 'border border-white/10 text-muted-foreground hover:text-foreground hover:bg-muted/50'}`}>{p}</button>
+              </>
+            ))}
+            <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page === totalPages}
+              className="w-9 h-9 rounded-xl border border-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/50 disabled:opacity-30 transition-all">
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+      <Footer />
+      <AIChatWidget />
+    </div>
+  );
+}
