@@ -30,10 +30,10 @@ Run the app: `npm run dev`
 
 **Publish your changes**
 
-Open [Base44.com](http://Base44.com) and click on Publish.
+Open (https://piyasa-iq.vercel.app/) and click on Publish.
 
 **Docs & Support**
 
-Documentation: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+Documentation: https://github.com/fcymailler-art/PiyasaIQ
 
-Support: [https://app.base44.com/support](https://app.base44.com/support)
+Support: piyasa-iq-git-main-borsa-ai-s-projects.vercel.app
