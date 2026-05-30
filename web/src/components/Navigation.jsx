@@ -58,7 +58,7 @@ const Navigation = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div className="relative w-420 h-20 flex items-center justify-center">
+              <div className="relative w-20 h-20 flex items-center justify-center">
                 <img 
                   src="/logo_olarak_bu.png" 
                   alt="PiyasaIQ Logo" 
