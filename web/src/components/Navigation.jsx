@@ -58,13 +58,11 @@ const Navigation = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div className="relative w-20 h-20 overflow-hidden rounded-xl flex items-center justify-center">
-  <img 
-    src="https://horizons-cdn.hostinger.com/eae5894d-bf92-4992-92ae-fc225b74637a/a6ee22f74ed0df941087def6045bcd2f.png" 
-    alt="PiyasaIQ Logo" 
-    className="w-20 h-20 object-contain"
-  />
-</div>
+              <div className="relative w-20 h-20 flex items-center justify-center">
+                <img 
+                  src="https://horizons-cdn.hostinger.com/eae5894d-bf92-4992-92ae-fc225b74637a/a6ee22f74ed0df941087def6045bcd2f.png" 
+                  alt="PiyasaIQ Logo" 
+                  className="w-20 h-20 object-contain"
                 />
               </div>
               <span className="text-2xl font-bold text-text hidden xl:block tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
