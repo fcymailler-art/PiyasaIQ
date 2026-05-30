@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Brain, TrendingUp, TrendingDown, ShieldAlert, Zap, BarChart3, Activity, ChevronRight } from 'lucide-react';
+import { Sparkles, Brain, TrendingUp, TrendingDown, ShieldAlert, Zap, BarChart3, Activity } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis } from 'recharts';
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
