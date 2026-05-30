@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Brain, TrendingUp, TrendingDown, ShieldAlert, Zap, BarChart3, Activity, ChevronRight } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis } from 'recharts';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import AIChatWidget from '../components/AIChatWidget';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import AIAssistant from '@/components/AIAssistant';
 
 const SIGNALS = [
   { symbol: 'BTC/USDT', signal: 'GÜÇLÜ AL', score: 89, change: '+2.34%', up: true, reason: 'Hacim artışı + momentum pozitif' },
@@ -35,19 +35,17 @@ export default function AIAnalysis() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <Navigation />
       <div className="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/20 mb-4">
             <Brain className="w-4 h-4 text-secondary" />
             <span className="text-sm font-medium text-secondary">Yapay Zeka Motoru</span>
           </div>
-          <h1 className="font-heading font-bold text-4xl text-foreground mb-2">AI Analiz Merkezi</h1>
+          <h1 className="font-bold text-4xl text-foreground mb-2">AI Analiz Merkezi</h1>
           <p className="text-muted-foreground">Tüm piyasalar için gerçek zamanlı yapay zeka analizi ve sinyalleri</p>
         </motion.div>
 
-        {/* Overview Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
           {[
             { label: 'Aktif Sinyal', value: '47', icon: Zap, color: 'text-primary', bg: 'bg-primary/10' },
@@ -65,9 +63,7 @@ export default function AIAnalysis() {
           ))}
         </div>
 
-        {/* Main Grid */}
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Signals Table */}
           <div className="lg:col-span-2">
             <div className="glass-card overflow-hidden">
               <div className="flex items-center gap-3 px-6 py-4 border-b border-white/5">
@@ -103,11 +99,9 @@ export default function AIAnalysis() {
             </div>
           </div>
 
-          {/* Right Panel */}
           <div className="space-y-6">
-            {/* Market Sentiment Radar */}
             <div className="glass-card p-6">
-              <h3 className="font-heading font-semibold text-foreground mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Activity className="w-4 h-4 text-secondary" /> Piyasa Duygusu
               </h3>
               <div className="h-48">
@@ -121,9 +115,8 @@ export default function AIAnalysis() {
               </div>
             </div>
 
-            {/* AI Trend Chart */}
             <div className="glass-card p-6">
-              <h3 className="font-heading font-semibold text-foreground mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <BarChart3 className="w-4 h-4 text-primary" /> AI Güven Endeksi
               </h3>
               <div className="h-32">
@@ -145,9 +138,8 @@ export default function AIAnalysis() {
               </div>
             </div>
 
-            {/* Top Alerts */}
             <div className="glass-card p-6">
-              <h3 className="font-heading font-semibold text-foreground mb-4 flex items-center gap-2">
+              <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
                 <ShieldAlert className="w-4 h-4 text-amber-400" /> AI Uyarıları
               </h3>
               <div className="space-y-3">
@@ -167,7 +159,7 @@ export default function AIAnalysis() {
         </div>
       </div>
       <Footer />
-      <AIChatWidget />
+      <AIAssistant />
     </div>
   );
 }
