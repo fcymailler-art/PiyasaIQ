@@ -60,7 +60,7 @@ const Navigation = () => {
             <Link to="/" className="flex items-center gap-3 group shrink-0">
               <div className="relative w-20 h-20 flex items-center justify-center">
                 <img 
-                  src="https://horizons-cdn.hostinger.com/eae5894d-bf92-4992-92ae-fc225b74637a/a6ee22f74ed0df941087def6045bcd2f.png" 
+                  src="/logo_olarak_bu.png" 
                   alt="PiyasaIQ Logo" 
                   className="w-20 h-20 object-contain"
                 />
