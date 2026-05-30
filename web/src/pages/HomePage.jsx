@@ -75,7 +75,7 @@ const HomePage = () => {
                   className="mb-8 relative"
                 >
                   <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
-                  <img src={logoUrl} alt="PiyasaIQ Logo" className="w-24 h-24 md:w-32 md:h-32 object-contain relative drop-shadow-2xl" />
+                  <img src={logoUrl} alt="PiyasaIQ Logo" className="w-32 h-32 md:w-42 md:h-42 object-contain relative drop-shadow-2xl" />
                 </motion.div>
 
                 <motion.div
