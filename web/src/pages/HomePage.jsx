@@ -1,202 +1,278 @@
-import TradingViewTickerTape from '../components/TradingViewTickerTape';
-import TradingViewMarketOverview from '../components/TradingViewMarketOverview';
+import React from 'react';
+import { Helmet } from 'react-helmet';
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Search, Globe, BarChart3, Zap } from 'lucide-react';
+import { ArrowRight, Sparkles, Filter, BellRing, ListPlus, LineChart, BrainCircuit, Activity } from 'lucide-react';
+import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
+import AIAssistant from '@/components/AIAssistant';
+import { Button } from '@/components/ui/button';
 
-export default function Home() {
+const HomePage = () => {
+  const logoUrl = "https://horizons-cdn.hostinger.com/eae5894d-bf92-4992-92ae-fc225b74637a/a6ee22f74ed0df941087def6045bcd2f.png";
+
+  const features = [
+    {
+      icon: BrainCircuit,
+      title: "AI Destekli Analiz",
+      description: "Karmaşık verileri anında işleyen modellerle, teknik ve temel analizi saniyeler içinde yorumlayın.",
+      link: "/ai-analiz",
+      colSpan: "col-span-1 md:col-span-2",
+      bg: "bg-gradient-to-br from-card to-primary/5"
+    },
+    {
+      icon: Filter,
+      title: "Gelişmiş Tarayıcı",
+      description: "Kendi stratejinize uygun binlerce varlığı anında filtreleyin.",
+      link: "/screener",
+      colSpan: "col-span-1",
+      bg: "bg-card"
+    },
+    {
+      icon: BellRing,
+      title: "Akıllı Alarmlar",
+      description: "İndikatör kırılımları ve fiyat hedefleri için uyarılar kurun.",
+      link: "/alerts",
+      colSpan: "col-span-1",
+      bg: "bg-card"
+    },
+    {
+      icon: LineChart,
+      title: "Profesyonel Grafik",
+      description: "TradingView gücüyle donatılmış analiz araçlarıyla piyasaya hakim olun.",
+      link: "/piyasalar",
+      colSpan: "col-span-1 md:col-span-2",
+      bg: "bg-gradient-to-br from-card to-accent/5"
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Header */}
-      <header className="relative z-40 bg-black/80 backdrop-blur border-b border-white/10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="https://media.base44.com/images/public/6a15692cb8d91bb70ada2ad4/b310f0f10_logoolarakbu.png" alt="PiyasaIQ" className="h-16 w-auto" />
-          </div>
+    <>
+      <Helmet>
+        <title>PiyasaIQ | Profesyonel Kripto & Hisse Analiz Platformu</title>
+        <meta name="description" content="AI destekli tarayıcı, akıllı izleme listeleri ve gerçek zamanlı alarmlar ile profesyonel yatırım kararları alın." />
+      </Helmet>
 
-          <nav className="hidden md:flex items-center gap-8 text-sm">
-            <button className="hover:text-purple-400 transition">Ürünler</button>
-            <button className="hover:text-purple-400 transition">Topluluk</button>
-            <button className="hover:text-purple-400 transition">Piyasalar</button>
-            <button className="hover:text-purple-400 transition">Araştırma</button>
-          </nav>
+      <div className="min-h-screen bg-background text-foreground selection:bg-primary/30 flex flex-col">
+        <Navigation />
 
-          <div className="flex items-center gap-4">
-            <button className="hidden sm:block p-2 hover:bg-white/10 rounded-lg transition">
-              <Search size={20} />
-            </button>
-            <button className="hidden sm:block px-4 py-2 rounded-lg hover:bg-white/10 transition">TR</button>
-            <button className="px-6 py-2 bg-purple-600 rounded-full hover:bg-purple-700 transition font-medium">
-              Başla
-            </button>
-          </div>
-        </div>
-      </header>
+        <main className="flex-1">
+          {/* Hero Section */}
+          <section className="relative min-h-[90vh] flex items-center pt-20 pb-24 overflow-hidden">
+            {/* Background Elements */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-accent/10 via-background to-background" />
+            
+            {/* Noise Texture */}
+            <div className="absolute inset-0 opacity-[0.02] pointer-events-none mix-blend-soft-light" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E")' }}></div>
 
-      {/* Ticker Tape */}
-      <div className="bg-black border-b border-white/10">
-        <TradingViewTickerTape />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+              <div className="flex flex-col items-center text-center">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.8, type: "spring" }}
+                  className="mb-8 relative"
+                >
+                  <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full" />
+                  <img src={logoUrl} alt="PiyasaIQ Logo" className="w-24 h-24 md:w-32 md:h-32 object-contain relative drop-shadow-2xl" />
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="max-w-4xl"
+                >
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm mb-6 text-sm font-medium text-foreground/80">
+                    <Sparkles size={16} className="text-primary" />
+                    Gerçek Zamanlı Piyasa İstihbaratı
+                  </div>
+
+                  <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight text-balance" style={{ fontFamily: 'Sora, sans-serif' }}>
+                    Yatırımlarınızı <br />
+                    <span className="gradient-text">Yapay Zeka</span> ile Yönetin
+                  </h1>
+
+                  <p className="text-lg md:text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed">
+                    Saniyesinde güncellenen analizler, duyarlılık (sentiment) skorları ve akıllı tarayıcı ile piyasanın bir adım önünde olun. Veriye dayalı kazançlı kararlar alın.
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Button size="lg" className="w-full sm:w-auto h-14 px-8 text-base font-semibold bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_30px_rgba(0,217,255,0.25)] hover:shadow-[0_0_40px_rgba(0,217,255,0.4)] transition-all" asChild>
+                      <Link to="/ai-analiz">
+                        AI Analizini Keşfet <ArrowRight size={18} className="ml-2" />
+                      </Link>
+                    </Button>
+                    <div className="flex gap-4 w-full sm:w-auto">
+                      <Button size="lg" variant="outline" className="flex-1 sm:w-auto h-14 px-6 border-white/10 hover:bg-white/5 bg-black/20 backdrop-blur-sm" asChild>
+                        <Link to="/screener">Tarayıcı</Link>
+                      </Button>
+                      <Button size="lg" variant="outline" className="flex-1 sm:w-auto h-14 px-6 border-white/10 hover:bg-white/5 bg-black/20 backdrop-blur-sm" asChild>
+                        <Link to="/alerts">Alarmlar</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+          {/* Stats Section */}
+          <section className="py-12 border-y border-white/5 bg-black/40">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div className="space-y-2">
+                  <h4 className="text-4xl font-bold text-primary" style={{ fontVariantNumeric: 'tabular-nums' }}>47.2k+</h4>
+                  <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">Aktif Yatırımcı</p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-4xl font-bold text-foreground" style={{ fontVariantNumeric: 'tabular-nums' }}>1.2M</h4>
+                  <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">Günlük Analiz</p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-4xl font-bold text-accent" style={{ fontVariantNumeric: 'tabular-nums' }}>500+</h4>
+                  <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">Kripto & Varlık</p>
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-4xl font-bold text-foreground" style={{ fontVariantNumeric: 'tabular-nums' }}>99.8%</h4>
+                  <p className="text-sm text-muted-foreground font-medium uppercase tracking-wider">Sistem Kesintisizliği</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Bento Grid Features */}
+          <section className="py-24 relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="mb-16 text-center md:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4" style={{ fontFamily: 'Sora, sans-serif' }}>
+                  Güçlü Araçlar. <span className="text-primary">Net Sonuçlar.</span>
+                </h2>
+                <p className="text-muted-foreground max-w-2xl text-lg">
+                  Yatırım kararlarınızı veri ve teknoloji ile destekleyin. İhtiyacınız olan her şey tek bir platformda.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {features.map((feature, i) => {
+                  const Icon = feature.icon;
+                  return (
+                    <motion.div
+                      key={feature.title}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.5, delay: i * 0.1 }}
+                      className={`${feature.colSpan} group relative overflow-hidden rounded-3xl border border-white/5 ${feature.bg} p-8 hover:border-white/10 transition-colors flex flex-col h-full`}
+                    >
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 transition-transform group-hover:scale-110" />
+                      
+                      <div className="relative z-10 h-full flex flex-col">
+                        <div className="w-12 h-12 rounded-2xl bg-black/40 border border-white/10 flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform">
+                          <Icon size={24} />
+                        </div>
+                        
+                        <h3 className="text-2xl font-bold mb-3 tracking-tight">{feature.title}</h3>
+                        <p className="text-muted-foreground mb-8 flex-grow text-lg leading-relaxed">
+                          {feature.description}
+                        </p>
+                        
+                        <Link to={feature.link} className="inline-flex items-center text-sm font-semibold text-primary group-hover:text-white transition-colors mt-auto w-fit">
+                          İncele <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
+          {/* About Us Preview */}
+          <section className="py-24 bg-card/30 border-t border-white/5">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary/10 text-secondary text-sm font-semibold mb-6 uppercase tracking-wider">
+                    <Activity size={16} /> PiyasaIQ Nedir?
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 text-balance" style={{ fontFamily: 'Sora, sans-serif' }}>
+                    Yatırım dünyasındaki karmaşayı ortadan kaldırıyoruz.
+                  </h2>
+                  <p className="text-muted-foreground text-lg mb-8 leading-relaxed">
+                    Misyonumuz, kurumsal devlerin sahip olduğu yapay zeka analiz gücünü bireysel yatırımcılar için erişilebilir kılmaktır. Şeffaf, hızlı ve güvenilir veriyle kendi potansiyelinizi ortaya çıkarın.
+                  </p>
+                  
+                  <ul className="space-y-4 mb-8">
+                    <li className="flex items-center gap-3 text-foreground font-medium">
+                      <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0">✓</div>
+                      Tamamen veriye dayalı şeffaf algoritmalar
+                    </li>
+                    <li className="flex items-center gap-3 text-foreground font-medium">
+                      <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0">✓</div>
+                      Özelleştirilebilir göstergeler ve alarmlar
+                    </li>
+                    <li className="flex items-center gap-3 text-foreground font-medium">
+                      <div className="w-6 h-6 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0">✓</div>
+                      Binlerce aktif kullanıcıya sahip topluluk
+                    </li>
+                  </ul>
+
+                  <Button variant="outline" size="lg" className="border-white/10 hover:bg-white/5" asChild>
+                    <Link to="/hakkimizda">Hakkımızda Daha Fazla Bilgi <ArrowRight size={16} className="ml-2" /></Link>
+                  </Button>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className="relative"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-accent/20 blur-3xl rounded-full opacity-50" />
+                  <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-card/80 backdrop-blur p-8">
+                    <div className="flex items-center gap-4 mb-8">
+                      <div className="w-12 h-12 rounded-full bg-black/40 flex items-center justify-center border border-white/5">
+                        <img src="https://horizons-cdn.hostinger.com/eae5894d-bf92-4992-92ae-fc225b74637a/77e19236327cde3cfcb4b33104e4ba04.png" alt="AI Mascot" className="w-8 h-8 object-cover rounded-full" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold">PiyasaIQ Alpha</h4>
+                        <p className="text-sm text-primary">Sistem Çevrimiçi</p>
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <div className="h-4 w-3/4 bg-white/5 rounded animate-pulse" />
+                      <div className="h-4 w-full bg-white/5 rounded animate-pulse" />
+                      <div className="h-4 w-5/6 bg-white/5 rounded animate-pulse" />
+                      <div className="p-4 rounded-xl bg-white/5 border border-white/5 mt-6">
+                        <div className="flex justify-between items-center text-sm mb-2">
+                          <span className="text-muted-foreground">Analiz Doğruluk Oranı (Son 30 Gün)</span>
+                          <span className="font-bold text-emerald-500">84.3%</span>
+                        </div>
+                        <div className="w-full h-1.5 bg-black/50 rounded-full overflow-hidden">
+                          <div className="h-full bg-emerald-500 w-[84.3%]" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </section>
+
+        </main>
+        
+        <Footer />
       </div>
-
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Video Background */}
-        <video
-          autoPlay
-          muted
-          loop
-          className="absolute inset-0 w-full h-full object-cover"
-          src="https://media.base44.com/videos/public/6a15692cb8d91bb70ada2ad4/f526bf065_spacehvc1f1e5855a3a06ff6e7cd1.mp4"
-        />
-        {/* Fallback Image */}
-        <img
-          src="https://media.base44.com/images/public/6a15692cb8d91bb70ada2ad4/55562bc8c_Ekrangrnts2026-05-26112711.png"
-          alt="Space Background"
-          className="absolute inset-0 w-full h-full object-cover hidden"
-        />
-
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/50 to-black/80" />
-
-        {/* Content */}
-        <div className="relative z-20 text-center max-w-3xl mx-auto px-4">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
-            Bakın önce<br />Sonra yatırım yapın.
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-8">
-            En iyi işlemler önce araştırma, sonra kararlılık gerektirir.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="px-8 py-3 bg-white text-black rounded-full font-bold hover:bg-gray-100 transition">
-              Ücretsiz Başla
-            </button>
-            <span className="text-gray-400 text-sm">Sonsuza kadar 0₺, kredi kartı gerekmez</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Market Overview */}
-      <section className="bg-black py-16 px-4 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold mb-12">Dünya piyasaları nerede?</h2>
-          <TradingViewMarketOverview />
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="bg-black py-20 px-4 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold mb-12">Neden PiyasaIQ?</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                <BarChart3 size={24} />
-              </div>
-              <h3 className="text-xl font-bold">Profesyonel Analiz</h3>
-              <p className="text-gray-400">Gerçek zamanlı piyasa verileri ve derinlemesine analizler</p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                <Zap size={24} />
-              </div>
-              <h3 className="text-xl font-bold">AI Asistanı</h3>
-              <p className="text-gray-400">Yapay zeka destekli öneriler ve piyasa öngörüleri</p>
-            </div>
-            <div className="space-y-4">
-              <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                <Globe size={24} />
-              </div>
-              <h3 className="text-xl font-bold">Global Piyasalar</h3>
-              <p className="text-gray-400">Dünyadaki tüm önemli borsalara anında erişim</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* AI Assistant Section */}
-      <section className="bg-gradient-to-b from-black via-purple-950/20 to-black py-20 px-4 border-b border-white/10">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-4xl font-bold mb-6">Akıllı Asistan ile Yatırım Yapın</h2>
-              <p className="text-gray-400 mb-8 text-lg">
-                PiyazaIQ AI asistanı, piyasa analizlerini 24/7 yaparak size en iyi yatırım kararlarında yardımcı olur.
-              </p>
-              <ul className="space-y-4 text-gray-300">
-                <li className="flex gap-3">
-                  <span className="text-purple-500">✓</span>
-                  <span>Gerçek zamanlı piyasa tavsiyesi</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-purple-500">✓</span>
-                  <span>Kişiselleştirilmiş portföy analizi</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="text-purple-500">✓</span>
-                  <span>Risk yönetimi stratejileri</span>
-                </li>
-              </ul>
-            </div>
-            <div className="bg-white/5 border border-white/10 rounded-xl p-8 flex items-center justify-center">
-              <img src="https://media.base44.com/images/public/6a15692cb8d91bb70ada2ad4/67c92ac20_Ekrangrnts2026-05-25143454.png" alt="AI Asistan" className="w-full h-auto object-contain" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-black py-20 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">Geleceği kendi ellerine alan milyonlara katılın</h2>
-          <p className="text-gray-400 mb-8 text-lg">100 milyondan fazla yatırımcı PiyazaIQ'yu güveniyor</p>
-          <button className="px-8 py-4 bg-purple-600 rounded-full font-bold text-lg hover:bg-purple-700 transition">
-            Şimdi Başla
-          </button>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-black/50 border-t border-white/10 py-12 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <h3 className="font-bold mb-4">Ürünler</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition">Grafik</a></li>
-                <li><a href="#" className="hover:text-white transition">Tarayıcı</a></li>
-                <li><a href="#" className="hover:text-white transition">AI Asistanı</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Şirket</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition">Hakkında</a></li>
-                <li><a href="#" className="hover:text-white transition">İş Ortaklıkları</a></li>
-                <li><a href="#" className="hover:text-white transition">Kariyer</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">Yasal</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition">Gizlilik</a></li>
-                <li><a href="#" className="hover:text-white transition">Koşullar</a></li>
-                <li><a href="#" className="hover:text-white transition">Disclaimer</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold mb-4">İletişim</h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li><a href="#" className="hover:text-white transition">Destek</a></li>
-                <li><a href="#" className="hover:text-white transition">Twitter</a></li>
-                <li><a href="#" className="hover:text-white transition">LinkedIn</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-white/10 pt-8 text-center text-gray-500 text-sm">
-            <p>&copy; 2026 PiyazaIQ. Tüm hakları saklıdır.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </>
   );
-}
+};
+
+export default HomePage;
