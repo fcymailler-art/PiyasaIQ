@@ -54,15 +54,15 @@ const Navigation = () => {
   return (
     <>
       <nav className="sticky top-0 z-50 border-b border-white/5 glass-panel">
-       <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-10">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group shrink-0">
-              <div className="relative w-25 h-25 flex items-center justify-center">
+              <div className="relative w-12 h-12 overflow-hidden rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center border border-white/10 group-hover:border-primary/50 transition-colors">
                 <img 
-                  src="/logo_olarak_bu.png" 
+                  src="https://horizons-cdn.hostinger.com/eae5894d-bf92-4992-92ae-fc225b74637a/a6ee22f74ed0df941087def6045bcd2f.png" 
                   alt="PiyasaIQ Logo" 
-                  className="w-25 h-25 object-contain"
+                  className="w-10 h-10 object-contain"
                 />
               </div>
               <span className="text-2xl font-bold text-text hidden xl:block tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
