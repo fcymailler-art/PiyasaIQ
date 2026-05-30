@@ -5,21 +5,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
-import ProtectedRoute from '@/components/ProtectedRoute';
-import { Navigate } from 'react-router-dom';
-import Login from '@/pages/Login';
-import Register from '@/pages/Register';
-import ForgotPassword from '@/pages/ForgotPassword';
-import ResetPassword from '@/pages/ResetPassword';
 import Home from './pages/Home';
-import Markets from './pages/Markets';
-import MarketDetail from './pages/MarketDetail';
-import Pricing from './pages/Pricing';
-import AIAnalysis from './pages/AIAnalysis';
-import News from './pages/News';
-import Heatmap from './pages/Heatmap';
-import Community from './pages/Community';
-import Screener from './pages/Screener';
+// Add page imports here
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -47,19 +34,7 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/" element={<Home />} />
-      <Route path="/piyasalar" element={<Markets />} />
-      <Route path="/piyasalar/:pair" element={<MarketDetail />} />
-      <Route path="/fiyatlandirma" element={<Pricing />} />
-      <Route path="/ai-analiz" element={<AIAnalysis />} />
-      <Route path="/haberler" element={<News />} />
-      <Route path="/isi-haritasi" element={<Heatmap />} />
-      <Route path="/topluluk" element={<Community />} />
-      <Route path="/eleme" element={<Screener />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
