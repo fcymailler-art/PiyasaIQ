@@ -262,3 +262,4 @@ const MarketDetailPage = () => {
 };
 
 export default MarketDetailPage;
+

@@ -224,3 +224,4 @@ import AIAssistant from '@/components/AIAssistant';
     </div>
   );
 }
+
