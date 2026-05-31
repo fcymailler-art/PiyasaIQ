@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Newspaper, Sparkles, TrendingUp, TrendingDown, Clock, ExternalLink, Filter } from 'lucide-react';
-import Navbar from '../components/Navbar';
+import Navigation from '@/components/Navigation';
 import Footer from '../components/Footer';
-import AIChatWidget from '../components/AIChatWidget';
+import AIAssistant from '@/components/AIAssistant';
 
 const NEWS = [
   { id: 1, title: 'Bitcoin 110,000 Dolar Zirvesine Yaklaşıyor: AI Analizi Ne Söylüyor?', source: 'CoinDesk', time: '12 dk önce', category: 'Kripto', sentiment: 'olumlu', aiScore: 85, impact: 'Yüksek', symbol: 'BTC', excerpt: 'Kurumsal alımlar ve ETF girişleri ile birlikte Bitcoin yeni bir ATH\'a doğru ilerliyor. AI modellerimiz güçlü momentum sinyali veriyor.' },
@@ -24,7 +24,7 @@ export default function News() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <Navigation />
       <div className="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-4">
@@ -109,7 +109,7 @@ export default function News() {
         </div>
       </div>
       <Footer />
-      <AIChatWidget />
+      <AIAssistant />
     </div>
   );
 }

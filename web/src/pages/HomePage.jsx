@@ -2,8 +2,32 @@ import TradingViewTickerTape from '../components/TradingViewTickerTape';
 import TradingViewMarketOverview from '../components/TradingViewMarketOverview';
 import { Link } from 'react-router-dom';
 import { Search, Globe, BarChart3, Zap } from 'lucide-react';
+import HeroSection from '../components/HeroSection';
+import LiveTicker from '../components/LiveTicker';
+import AICards from '../components/AICards';
+import TrendCoins from '../components/TrendCoins';
+import AIHeatmapSection from '../components/AIHeatmapSection';
+import AINewsSection from '../components/AINewsSection';
+import PricingSection from '../components/PricingSection';
+import Navigation from '@/components/Navigation';
+import Footer from '../components/Footer';
+import AIAssistant from '@/components/AIAssistant';
 
-export default function Home() {
+  export default function Home() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      <HeroSection />
+      <LiveTicker />
+      <AICards />
+      <TrendCoins />
+      <AIHeatmapSection />
+      <AINewsSection />
+      <PricingSection />
+      <Footer />
+      <AIAssistant />
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">

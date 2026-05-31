@@ -175,8 +175,9 @@ function useIntegratedAi() {
 		async function loadHistory() {
 			try {
 				if (!pocketbaseClient.authStore.isValid) {
-					return [];
-				}
+  setIsLoadingHistory(false);
+  return;
+}
 			
 				const records = await pocketbaseClient.collection('_integratedAiMessages').getFullList({
 					sort: 'created',

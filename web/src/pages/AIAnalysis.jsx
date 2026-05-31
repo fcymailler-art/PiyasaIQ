@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Brain, TrendingUp, TrendingDown, ShieldAlert, Zap, BarChart3, Activity, ChevronRight } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer, RadarChart, Radar, PolarGrid, PolarAngleAxis } from 'recharts';
-import Navbar from '../components/Navbar';
+import Navigation from '@/components/Navigation';
 import Footer from '../components/Footer';
-import AIChatWidget from '../components/AIChatWidget';
+import AIAssistant from '@/components/AIAssistant';
 
 const SIGNALS = [
   { symbol: 'BTC/USDT', signal: 'GÜÇLÜ AL', score: 89, change: '+2.34%', up: true, reason: 'Hacim artışı + momentum pozitif' },
@@ -35,7 +35,7 @@ export default function AIAnalysis() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <Navigation />
       <div className="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-10">
@@ -167,7 +167,7 @@ export default function AIAnalysis() {
         </div>
       </div>
       <Footer />
-      <AIChatWidget />
+      <AIAssistant />
     </div>
   );
 }

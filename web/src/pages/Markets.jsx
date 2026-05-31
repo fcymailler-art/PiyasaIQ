@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, TrendingUp, TrendingDown, Sparkles, ArrowUpDown, Activity, ChevronLeft, ChevronRight } from 'lucide-react';
 import { AreaChart, Area, ResponsiveContainer } from 'recharts';
-import Navbar from '../components/Navbar';
+import Navigation from '@/components/Navigation';
 import Footer from '../components/Footer';
-import AIChatWidget from '../components/AIChatWidget';
+import AIAssistant from '@/components/AIAssistant';
 import { ALL_MARKET_DATA, SECTORS, SIGNAL_STYLE } from '../lib/marketData';
 
 const PAGE_SIZE = 25;
@@ -72,7 +72,7 @@ export default function Markets() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar />
+      <Navigation />
       <div className="pt-24 pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
@@ -230,7 +230,7 @@ export default function Markets() {
         </div>
       </div>
       <Footer />
-      <AIChatWidget />
+      <AIAssistant />
     </div>
   );
 }
