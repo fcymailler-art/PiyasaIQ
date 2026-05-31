@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite --host :: --port 3000",
-    "build": "node node_modules/vite/bin/vite.js build",
+    "build": "vite build",
     "start": "vite preview --outDir ../../dist/apps/web --host :: --port 3000",
     "lint": "eslint . --quiet",
     "lint:warn": "eslint ."
@@ -86,5 +86,6 @@
     "vite": "^7.3.1"
   }
 }
+
 
 
