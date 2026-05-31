@@ -13,7 +13,9 @@ import ScreenerPage from './pages/ScreenerPage';
 import WatchlistPage from './pages/WatchlistPage';
 import AlertsPage from './pages/AlertsPage';
 import AboutUsPage from './pages/AboutUsPage';
-import AIAnalysisPage from './pages/AIAnalysis';
+import AIAnalysisPage from './pages/AIAnalysisPage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import AIAssistant from './components/AIAssistant';
 import { Toaster } from 'sonner';
 
@@ -25,7 +27,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/piyasalar" element={<MarketsPage />} />
         <Route path="/piyasalar/:symbol" element={<MarketDetailPage />} />
-        <Route path="/piyasalar/isı-haritası" element={<HeatMapPage />} />
+        <Route path="/piyasalar/isi-haritasi" element={<HeatMapPage />} />
         <Route path="/haberler" element={<NewsPage />} />
         <Route path="/topluluk" element={<CommunityPage />} />
         <Route path="/topluluk/profil/:userId" element={<ProfilePage />} />
@@ -35,7 +37,8 @@ function App() {
         <Route path="/alerts" element={<AlertsPage />} />
         <Route path="/hakkimizda" element={<AboutUsPage />} />
         <Route path="/ai-analiz" element={<AIAnalysisPage />} />
-        
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="*" element={
           <div className="min-h-screen bg-background text-foreground flex items-center justify-center flex-col">
             <div className="text-center p-8 bg-card rounded-3xl border border-white/5 max-w-md">
