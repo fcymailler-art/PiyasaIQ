@@ -13,7 +13,7 @@ import ScreenerPage from './pages/ScreenerPage';
 import WatchlistPage from './pages/WatchlistPage';
 import AlertsPage from './pages/AlertsPage';
 import AboutUsPage from './pages/AboutUsPage';
-import AIAnalysisPage from './pages/AIAnalysisPage';
+import AIAnalysisPage from './pages/AIAnalysis';
 import AIAssistant from './components/AIAssistant';
 import { Toaster } from 'sonner';
 
