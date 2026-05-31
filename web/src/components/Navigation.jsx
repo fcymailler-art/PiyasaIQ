@@ -62,7 +62,7 @@ const Navigation = () => {
                 <img 
                  src="/logo_olarak_bu.png" 
                   alt="PiyasaIQ Logo" 
-                  className="w-15 h-15 object-contain"
+                  className="w-10 h-10 object-contain"
                 />
               </div>
               <span className="text-2xl font-bold text-text hidden xl:block tracking-tight" style={{ fontFamily: 'Sora, sans-serif' }}>
